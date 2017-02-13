@@ -39,6 +39,9 @@ html { background-color: black; }
   }
 
   function ol() {
+    if (!('ontouchstart' in window)) {
+      window.alert('You need a touchscreen device to use this app.');
+    }
     KeyboardPanel.init(bgKeyCanvas, fgKeyCanvas);
     MutePanel.init(bgMuteCanvas, fgMuteCanvas);
     ChordPanel.init(bgChordCanvas, fgChordCanvas);
@@ -61,6 +64,6 @@ html { background-color: black; }
 <canvas id="bgChordCanvas" style="position:absolute; z-index:0; left:520px"></canvas>
 <canvas id="fgChordCanvas" style="position:absolute; z-index:1; left:520px"></canvas>
 <p hidden id="output" style="color:white; position:absolute; top:240px">debug output</p>
-<button id="fullscreenButton" style="position:absolute; top:20px; left:220px; background-color: black">Toggle Fullscreen</button>
+<button id="fullscreenButton" style="position:absolute; top:20px; left:220px; color:white; background-color: black">Toggle Fullscreen</button>
 </body>
 </html>
