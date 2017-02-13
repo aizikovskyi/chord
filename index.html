@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+<style type="text/css">
+body { margin: 0px; overflow: hidden; background-color: black; }
+html { background-color: black; }
+</style>
+<script type="text/javascript" src="keyboardpanel.js"></script>
+<script type="text/javascript" src="mutepanel.js"></script>
+<script type="text/javascript" src="chordpanel.js"></script>
+<script type="text/javascript" src="soundengine.js"></script>
+<script type="text/javascript">
+
+  function debugLog(msg) {
+  	document.getElementById('output').innerHTML = msg;
+  }
+
+  function toggleFullScreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+      requestFullScreen.call(docEl);
+    }
+    else {
+      cancelFullScreen.call(doc);
+    }
+  }
+
+  function layoutElements() {
+    ChordPanel.moveTo(window.innerWidth - bgChordCanvas.width,
+      window.innerHeight - bgChordCanvas.height);
+    KeyboardPanel.moveTo(fgMuteCanvas.width + 10, window.innerHeight - bgKeyCanvas.height);
+    MutePanel.moveTo(0, window.innerHeight - bgKeyCanvas.height - fgMuteCanvas.height);
+  }
+
+  function ol() {
+    KeyboardPanel.init(bgKeyCanvas, fgKeyCanvas);
+    MutePanel.init(bgMuteCanvas, fgMuteCanvas);
+    ChordPanel.init(bgChordCanvas, fgChordCanvas);
+    SoundEngine.init();
+    fgMuteCanvas.addEventListener('click', function() { SoundEngine.playChord('maj7'); });
+    fullscreenButton.addEventListener('click', toggleFullScreen);
+    window.onresize = () => {
+      layoutElements();
+    };
+    layoutElements();
+  }
+
+</script>
+</head>
+<body onload="ol()">
+<canvas id="bgKeyCanvas" style="position:absolute; z-index:0; left:100px"></canvas>
+<canvas id="fgKeyCanvas" style="position:absolute; z-index:1; left:100px"></canvas>
+<canvas id="bgMuteCanvas" style="position:absolute; z-index:0"></canvas>
+<canvas id="fgMuteCanvas" style="position:absolute; z-index:1"></canvas>
+<canvas id="bgChordCanvas" style="position:absolute; z-index:0; left:520px"></canvas>
+<canvas id="fgChordCanvas" style="position:absolute; z-index:1; left:520px"></canvas>
+<p hidden id="output" style="color:white; position:absolute; top:240px">debug output</p>
+<button id="fullscreenButton" style="position:absolute; top:20px; left:220px; background-color: black">Toggle Fullscreen</button>
+</body>
+</html>
